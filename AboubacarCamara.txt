@@ -1,0 +1,83 @@
+creation de la base de donnée Gestion d'employer
+
+1) creation de base de donnée
+create database gestionEmploye;
+2) creation de la table employer 
+
+create table `Employe`(
+Matricule int(20) primary key,
+nom varchar(20),
+salaire int(20),
+fonction text(20),
+telephone int(20),
+codedept int(20)
+);
+
+3) creation de la table departement
+
+create table `Departement`(
+ codedept int(20) primary key,
+nomdepartement varchar(20),
+capacite int(20)
+);
+
+alter table employe add foreign key (codedept) references departement(codedept);
+ check sur le salaire
+alter table employe add check (salaire > 0);
+alter table departement add check ( capacite > 0);
+alter table employe add adresse varchar(30);
+alter table employe add check (fonction in ('commercial', 'agent d’accueil', 'agent de terrain', 'assistance'));
+alter table departement add check (nomdepartement regexp ('^d_[a-z]+$'));
+alter table employe add constraints ch3 check (telephone regexp ('^0[0-9]{9}$'));
+
+insert into departement values(
+	203 ,
+	'd_digital',
+	25
+);
+
+alter table employe modify telephone varchar(20);
+
+
+insert into employe values(
+	10,
+    'Gassama',
+	20000 ,
+    'commercial',
+    '01234567891',
+	203,
+    'oujda'
+);
+
+
+
+SELECT D.nomdepartement, COUNT(E.matricule) AS nombre_employes
+FROM Departement D
+LEFT JOIN Employe E ON D.codedept = E.codedept
+GROUP BY D.nomdepartement;
+
+SELECT D.nomdepartement, SUM(E.salaire) AS somme_salaires
+FROM Departement D
+LEFT JOIN Employe E ON D.codedept = E.codedept
+GROUP BY D.nomdepartement;
+
+SELECT COUNT(*) AS nombre_employes
+FROM Employe;
+
+CREATE VIEW V1 AS
+SELECT nom, salaire
+FROM Employe
+ORDER BY salaire ASC;
+
+les differnt mode d'application de create view.
+
+create view V3 as 
+select sum(salaire) as sal1 from employe
+;
+
+select * from v3;
+
+select sal1 from v3;
+
+create view V4 as select d.nomdepartement, 
+count(*) as N from employe as e join departement as d on e.codedept =d.codedept group by d.nomdepartement;
