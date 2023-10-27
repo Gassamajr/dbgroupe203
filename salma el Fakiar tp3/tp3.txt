@@ -1,0 +1,48 @@
+V1/
+
+CREATE VIEW `v1` AS
+    SELECT 
+        `matricule`,
+        `nom`,
+        `salaire`,
+        `fonction`,
+        `telephone`,
+        `codedept`,
+        `adresse`
+    FROM `employe`
+    WHERE `salaire` > 8000;
+
+------------------------------------
+
+V2/
+
+CREATE VIEW `v2` AS
+    SELECT 
+        `matricule`,
+        `nom`,
+        `salaire`,
+        `fonction`,
+        `telephone`,
+        `codedept`,
+        `adresse`
+    FROM `employe`
+    WHERE `salaire` <= 8000;
+
+-------------------------------------
+
+V3/
+
+CREATE VIEW `v3` AS
+    SELECT SUM(`salaire`) AS `sall`
+    FROM `employe`;
+
+-------------------------------------
+
+V4/
+
+CREATE VIEW `v4` AS
+    SELECT `nomdepartement`, COUNT(*) AS `N`
+    FROM `employe` `e`
+    JOIN `departement` `d` ON (`e`.`codedept` = `d`.`codedept`)
+    GROUP BY `nomdepartement`;
+

@@ -1,0 +1,65 @@
+---------------------------------------------Question A---------------------------------------------
+create database gestionEmploye;
+use gestionEmploye;
+create table Departement(codedept int(3) primary key auto_increment,
+						nomdepartement varchar(30),
+                        capacite int);
+
+create table Employe(matricule int(3) primary key auto_increment,codedept int,
+					nom varchar(30),salaire float,fonction varchar(30),
+                    telephone varchar(12), 
+                    foreign key(codedept) references Departement(codedept)
+                    );
+				
+---------------------------------------------Question B---------------------------------------------
+alter table Departement
+	add constraint check (capacite>0);
+
+---------------------------------------------Question C---------------------------------------------
+alter table Employe
+	add column adresse varchar(30);
+
+---------------------------------------------Question D---------------------------------------------
+alter table Employe
+	add check (fonction IN ('commercial', 'agent d’accueil', 'agent de terrain','assistance'));
+
+---------------------------------------------Question E---------------------------------------------
+alter table Departement
+	add check (nomdepartement regexp '[^d_.+_]');
+
+---------------------------------------------Question F---------------------------------------------
+alter table Employe
+	add check (telephone regexp '^0[0-9]{9}');
+
+---------------------------------------------Question G---------------------------------------------  
+insert into Departement (nomdepartement,  capacite)
+		values('d_Informatique_',100),
+			('d_Finance_',150),
+            		('d_Agro_',200);
+            
+insert into Employe (codedept, nom,salaire,fonction,telephone,adresse)
+		values(1,'Oldy',1000.00,'commercial','0690224785','Iris'),
+			(2,'James',2001.00,'assistance','0794532725','Doha'),
+                	(3,'Tyler',3000.00,'agent de terrain','0689304357','Doha');
+
+---------------------------------------------Question H---------------------------------------------                
+select nomdepartement, count(*) as nombre from Employe
+inner join Departement on Departement.codedept=Employe.codedept
+group by nomdepartement;
+
+
+---------------------------------------------Question I---------------------------------------------
+select sum(salaire) as somme_Salaire from Employe inner join Departement on Departement.codedept=Employe.codedept
+group by nomdepartement;
+
+
+---------------------------------------------Question J---------------------------------------------
+select count(*) from Employe;
+
+
+---------------------------------------------Question K---------------------------------------------
+select nom from Employe where nom regexp '^[aeiouy]{1}.+$';
+
+---------------------------------------------Question L---------------------------------------------
+create view v1 as select nom,salaire from employe order by salaire asc;
+select * from v1;

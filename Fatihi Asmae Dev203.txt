@@ -1,0 +1,86 @@
+create database gestionEmploye;
+use gestionEmploye;
+CREATE TABLE Departement (
+    codedept INT PRIMARY KEY,
+    nomdepartement VARCHAR(50),
+    capacite INT  
+);
+CREATE TABLE Employe (
+    matricule INT PRIMARY KEY,
+    nom VARCHAR(50),
+    salaire real,
+    fonction VARCHAR(30),
+    telephone VARCHAR(10),
+    codedept INT,
+    FOREIGN KEY (codedept) REFERENCES Departement(codedept)
+);
+Alter table Employe ADD check (salaire > 0);
+Alter table Departement ADD check (capacite > 0);
+
+ALTER TABLE Employe
+ADD adresse VARCHAR(30);
+
+ALTER TABLE Employe
+ADD CONSTRAINT check_fonction CHECK (fonction IN ('commercial', 'agent d’accueil', 'agent de terrain', 'assistance'));
+
+ALTER TABLE Departement
+ADD CONSTRAINT check_nomdepartement CHECK (nomdepartement REGEXP '^d_.+_*$');
+
+ALTER TABLE Employe
+ADD CONSTRAINT check_telephone CHECK (telephone REGEXP '^0[0-9]{9}$');
+
+insert into Departement(codedept,nomdepartement,capacite)
+values(1,'d_info_',30),
+(2,'d_ghgh_',50);
+
+insert into Employe(matricule,nom,salaire,fonction,telephone,codedept,adresse)
+values(21358,'fatihi',150000000,'assistance','0712365478',1,'Oujda'),
+(22258,'sebia',180000000,'commercial','0666226488',2,'Oujda');
+
+SELECT D.nomdepartement, COUNT(E.matricule) AS nombre_employes
+FROM Departement D
+LEFT JOIN Employe E ON D.codedept = E.codedept
+GROUP BY D.nomdepartement;
+
+SELECT D.nomdepartement, SUM(E.salaire) AS somme_salaires
+FROM Departement D
+LEFT JOIN Employe E ON D.codedept = E.codedept
+GROUP BY D.nomdepartement;
+
+SELECT COUNT(*) AS nombre_employes
+FROM Employe;
+
+SELECT *
+FROM Employe
+WHERE LOWER(SUBSTRING(nom, 1, 1)) IN ('a', 'e', 'i', 'o', 'u');
+
+CREATE VIEW V1 AS
+SELECT nom, salaire
+FROM Employe
+ORDER BY salaire ASC;
+
+CREATE VIEW V2 AS 
+SELECT * from Employe 
+where salaire <=200000000;
+
+select  * from v2;
+
+create view v3 AS
+select sum(salaire) as salaire from Employe;
+
+select * from v3;
+
+create view v4 AS 
+select d.nomdepartement,count(*) as N from Employe as e join
+departement as d on e.codedept = d.codedept
+group by d.nomdepartement;
+
+ #champ calculer
+create view v5 as 
+select * from employe ;
+
+select count(),sum(salaire)/count(),avg(salaire),min(salaire) , max(salaire)from Employe ; 
+
+
+select count(*),count(nom) from employe
+#count (nom) compte les valeurs not null only
